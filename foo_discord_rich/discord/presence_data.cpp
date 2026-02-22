@@ -41,7 +41,7 @@ qwr::u8string PercentEncode( const qwr::u8string& input )
 {
     qwr::u8string result;
     result.reserve( input.size() * 3 );
-    for ( unsigned char c : input )
+    for ( unsigned char c: input )
     {
         if ( std::isalnum( c ) || c == '-' || c == '_' || c == '.' || c == '~' )
         {
@@ -150,7 +150,7 @@ void PresenceData::UpdateButtonPointers()
         if ( !label.empty() && !url.empty() && count < 2 )
         {
             presence.buttons[count].label = label.c_str();
-            presence.buttons[count].url   = url.c_str();
+            presence.buttons[count].url = url.c_str();
             ++count;
         }
     };
@@ -159,7 +159,7 @@ void PresenceData::UpdateButtonPointers()
     for ( int i = count; i < 2; ++i )
     {
         presence.buttons[i].label = nullptr;
-        presence.buttons[i].url   = nullptr;
+        presence.buttons[i].url = nullptr;
     }
     presence.buttonCount = count;
 }
@@ -390,27 +390,27 @@ void PresenceModifier::UpdateButtons()
     if ( isYouTube )
     {
         pd.button1Label = "YouTubeで視聴";
-        pd.button1Url   = path;
+        pd.button1Url = path;
 
         const auto channelUrl = queryData( "$meta(Channel_URL)" );
         if ( !channelUrl.empty() )
         {
             pd.button2Label = "チャンネル";
-            pd.button2Url   = channelUrl;
+            pd.button2Url = channelUrl;
         }
     }
     else
     {
-        const auto artist       = queryData( "%artist%" );
-        const auto title        = queryData( "%title%" );
-        const auto searchQuery  = artist + " " + title;
+        const auto artist = queryData( "%artist%" );
+        const auto title = queryData( "%title%" );
+        const auto searchQuery = artist + " " + title;
         const auto encodedQuery = PercentEncode( searchQuery );
 
         pd.button1Label = "Spotifyで検索";
-        pd.button1Url   = "https://open.spotify.com/search/" + encodedQuery;
+        pd.button1Url = "https://open.spotify.com/search/" + encodedQuery;
 
         pd.button2Label = "Apple Musicで検索";
-        pd.button2Url   = "https://music.apple.com/search?term=" + encodedQuery;
+        pd.button2Url = "https://music.apple.com/search?term=" + encodedQuery;
     }
 
     pd.UpdateButtonPointers();

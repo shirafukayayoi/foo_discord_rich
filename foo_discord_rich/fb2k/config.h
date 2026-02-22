@@ -19,7 +19,7 @@ enum class TimeSetting : uint8_t
 enum class StatusSetting : uint8_t
 {
     Name = 0,
-    Middle,     // to match order with discord's "name, state, details"
+    Middle, // to match order with discord's "name, state, details"
     Top
 };
 
