@@ -63,6 +63,7 @@ void PlaybackCallback::on_playback_new_track( metadb_handle_ptr track )
     auto pm = DiscordAdapter::GetInstance().GetPresenceModifier();
     pm.UpdateTrack( track );
     pm.UpdateSmallImage();
+    pm.UpdateButtons();
 }
 
 void PlaybackCallback::on_playback_stop( play_control::t_stop_reason reason )
@@ -94,6 +95,7 @@ void PlaybackCallback::on_playback_pause( bool state )
         auto pm = DiscordAdapter::GetInstance().GetPresenceModifier();
         pm.UpdateTrack();
         pm.UpdateSmallImage();
+        pm.UpdateButtons();
     }
     else
     { // resuming playback may take some time, thus on_playback_time is needed
@@ -141,6 +143,7 @@ void PlaybackCallback::on_playback_time( double time )
         auto pm = DiscordAdapter::GetInstance().GetPresenceModifier();
         pm.UpdateTrack();
         pm.UpdateSmallImage();
+        pm.UpdateButtons();
 
         needPresenceRefresh_ = false;
     }
@@ -150,6 +153,7 @@ void PlaybackCallback::on_playback_changed( metadb_handle_ptr track )
 {
     auto pm = DiscordAdapter::GetInstance().GetPresenceModifier();
     pm.UpdateTrack( track );
+    pm.UpdateButtons();
 }
 
 } // namespace

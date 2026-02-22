@@ -32,5 +32,6 @@ qwr::fb2k::ConfigString pausedImageId_Dark( guid::conf_paused_image_id_dark, "pa
 
 qwr::fb2k::ConfigBool disableWhenPaused( guid::conf_disable_when_paused, false );
 qwr::fb2k::ConfigBool swapSmallImages( guid::conf_swap_small_images, false );
+qwr::fb2k::ConfigBool enableButtons( guid::conf_enable_buttons, false );
 
 } // namespace drp::config

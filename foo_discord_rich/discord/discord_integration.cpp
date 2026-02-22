@@ -63,6 +63,7 @@ void DiscordAdapter::OnSettingsChanged()
     pm.UpdateImage();
     pm.UpdateSmallImage();
     pm.UpdateTrack();
+    pm.UpdateButtons();
     if ( !config::isEnabled )
     {
         pm.Disable();

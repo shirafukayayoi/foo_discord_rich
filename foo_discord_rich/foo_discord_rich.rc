@@ -91,14 +91,16 @@ BEGIN
     GROUPBOX        "Track duration",IDC_STATIC,218,134,102,55
     CONTROL         "Elapsed time",IDC_RADIO_TIME_ELAPSED,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,227,147,56,10
     CONTROL         "Disabled",IDC_RADIO_TIME_DISABLED,"Button",BS_AUTORADIOBUTTON,227,159,43,10
-    GROUPBOX        "Miscellaneous",IDC_STATIC,6,191,207,56
+    GROUPBOX        "Miscellaneous",IDC_STATIC,6,191,207,69
     CONTROL         "Fetch and display album art from MusicBrainz",IDC_CHECK_FETCH_ALBUM_ART,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,205,159,10
     CONTROL         "Disable Rich Presence when paused",IDC_CHECK_DISABLE_WHEN_PAUSED,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,218,128,10
     CONTROL         "Swap `paused` and `playing` images",IDC_CHECK_SWAP_STATUS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,231,135,10
-    GROUPBOX        "Show status as",IDC_STATIC,218,191,102,56
+    CONTROL         "Enable YouTube/Spotify/Apple Music buttons",IDC_CHECK_ENABLE_BUTTONS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,244,159,10
+    GROUPBOX        "Show status as",IDC_STATIC,218,191,102,69
     CONTROL         "App Name",IDC_RADIO_STATUS_NAME,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,227,204,56,10
     CONTROL         "Top Field",IDC_RADIO_STATUS_TOP,"Button",BS_AUTORADIOBUTTON,227,216,46,10
     CONTROL         "Middle Field",IDC_RADIO_STATUS_MIDDLE,"Button",BS_AUTORADIOBUTTON,227,228,55,10

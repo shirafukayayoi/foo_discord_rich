@@ -14,7 +14,7 @@ diff --git a/submodules/discord-rpc/include/discord_rpc.h b/submodules/discord-r
 index 9470434..20f29bc 100644
 --- a/submodules/discord-rpc/include/discord_rpc.h
 +++ b/submodules/discord-rpc/include/discord_rpc.h
-@@ -23,7 +23,24 @@
+@@ -23,7 +23,34 @@
  extern "C" {
  #endif
  
@@ -33,12 +33,23 @@ index 9470434..20f29bc 100644
 +    DETAILS = 2
 +} StatusDisplayType;
 +
++typedef struct DiscordButton {
++    const char* label; /* max 32 bytes */
++    const char* url;   /* max 512 bytes */
++} DiscordButton;
++
  typedef struct DiscordRichPresence {
 +    DiscordActivityType activityType;
 +    StatusDisplayType statusDisplayType;
      const char* state;   /* max 128 bytes */
      const char* details; /* max 128 bytes */
      int64_t startTimestamp;
+@@ -43,6 +57,8 @@
+     const char* spectateSecret; /* max 128 bytes */
++    DiscordButton buttons[2]; /* max 2 buttons */
++    int buttonCount;
+     int8_t instance;
+ } DiscordRichPresence;
 diff --git a/submodules/discord-rpc/src/serialization.cpp b/submodules/discord-rpc/src/serialization.cpp
 index 70efa63..e822dfc 100644
 --- a/submodules/discord-rpc/src/serialization.cpp
@@ -57,5 +68,24 @@ index 70efa63..e822dfc 100644
 +
                  WriteOptionalString(writer, "state", presence->state);
                  WriteOptionalString(writer, "details", presence->details);
- 
+@@ -148,6 +162,21 @@
+             WriteOptionalBool(writer, "instance", presence->instance);
++
++            if (presence->buttonCount > 0) {
++                WriteKey(writer, "buttons");
++                writer.StartArray();
++                for (int i = 0; i < presence->buttonCount && i < 2; ++i) {
++                    if (presence->buttons[i].label && presence->buttons[i].url) {
++                        writer.StartObject();
++                        WriteKey(writer, "label");
++                        writer.String(presence->buttons[i].label);
++                        WriteKey(writer, "url");
++                        writer.String(presence->buttons[i].url);
++                        writer.EndObject();
++                    }
++                }
++                writer.EndArray();
++            }
+         }
+     }
  

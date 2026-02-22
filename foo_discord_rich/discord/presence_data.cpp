@@ -37,6 +37,30 @@ qwr::u8string EvaluateQueryForPlayingTrack( const metadb_handle_ptr& handle, con
     return result.c_str();
 }
 
+qwr::u8string PercentEncode( const qwr::u8string& input )
+{
+    qwr::u8string result;
+    result.reserve( input.size() * 3 );
+    for ( unsigned char c : input )
+    {
+        if ( std::isalnum( c ) || c == '-' || c == '_' || c == '.' || c == '~' )
+        {
+            result += static_cast<char>( c );
+        }
+        else if ( c == ' ' )
+        {
+            result += '+';
+        }
+        else
+        {
+            result += '%';
+            result += "0123456789ABCDEF"[c >> 4];
+            result += "0123456789ABCDEF"[c & 0xF];
+        }
+    }
+    return result;
+}
+
 } // namespace
 
 namespace drp::internal
@@ -78,7 +102,11 @@ bool PresenceData::operator==( const PresenceData& other )
            && areStringsSame( presence.smallImageText, other.presence.smallImageText )
            && presence.startTimestamp == other.presence.startTimestamp
            && presence.endTimestamp == other.presence.endTimestamp
-           && trackLength == other.trackLength;
+           && trackLength == other.trackLength
+           && button1Label == other.button1Label
+           && button1Url == other.button1Url
+           && button2Label == other.button2Label
+           && button2Url == other.button2Url;
 }
 
 bool PresenceData::operator!=( const PresenceData& other )
@@ -95,9 +123,14 @@ void PresenceData::CopyData( const PresenceData& other )
     largeImageKey = other.largeImageKey;
     smallImageKey = other.smallImageKey;
     trackLength = other.trackLength;
+    button1Label = other.button1Label;
+    button1Url = other.button1Url;
+    button2Label = other.button2Label;
+    button2Url = other.button2Url;
 
     memcpy( &presence, &other.presence, sizeof( presence ) );
     UpdateTextFieldPointers();
+    UpdateButtonPointers();
     presence.activityType = DiscordActivityType::LISTENING;
     presence.largeImageKey = ( largeImageKey.empty() ? nullptr : largeImageKey.c_str() );
     presence.smallImageKey = ( smallImageKey.empty() ? nullptr : smallImageKey.c_str() );
@@ -108,6 +141,27 @@ void PresenceData::UpdateTextFieldPointers()
     presence.details = topText.c_str();
     presence.state = middleText.c_str();
     presence.largeImageText = bottomText.c_str();
+}
+
+void PresenceData::UpdateButtonPointers()
+{
+    int count = 0;
+    auto addButton = [&]( const qwr::u8string& label, const qwr::u8string& url ) {
+        if ( !label.empty() && !url.empty() && count < 2 )
+        {
+            presence.buttons[count].label = label.c_str();
+            presence.buttons[count].url   = url.c_str();
+            ++count;
+        }
+    };
+    addButton( button1Label, button1Url );
+    addButton( button2Label, button2Url );
+    for ( int i = count; i < 2; ++i )
+    {
+        presence.buttons[i].label = nullptr;
+        presence.buttons[i].url   = nullptr;
+    }
+    presence.buttonCount = count;
 }
 
 } // namespace drp::internal
@@ -309,6 +363,57 @@ void PresenceModifier::UpdateTrack( metadb_handle_ptr metadb )
     UpdateDuration( durationStr.empty() ? 0 : stold( durationStr ), lengthStr.empty() ? 0 : stold( lengthStr ) );
 
     UpdateImage();
+}
+
+void PresenceModifier::UpdateButtons()
+{
+    auto& pd = presenceData_;
+
+    pd.button1Label.clear();
+    pd.button1Url.clear();
+    pd.button2Label.clear();
+    pd.button2Url.clear();
+
+    if ( !config::enableButtons || pd.metadb.is_empty() )
+    {
+        pd.UpdateButtonPointers();
+        return;
+    }
+
+    const auto queryData = [&pd]( const qwr::u8string& query ) {
+        return EvaluateQueryForPlayingTrack( pd.metadb, query );
+    };
+
+    const auto path = queryData( "%path%" );
+    const bool isYouTube = ( path.find( "youtube.com/" ) != qwr::u8string::npos );
+
+    if ( isYouTube )
+    {
+        pd.button1Label = "YouTubeで視聴";
+        pd.button1Url   = path;
+
+        const auto channelUrl = queryData( "$meta(Channel_URL)" );
+        if ( !channelUrl.empty() )
+        {
+            pd.button2Label = "チャンネル";
+            pd.button2Url   = channelUrl;
+        }
+    }
+    else
+    {
+        const auto artist       = queryData( "%artist%" );
+        const auto title        = queryData( "%title%" );
+        const auto searchQuery  = artist + " " + title;
+        const auto encodedQuery = PercentEncode( searchQuery );
+
+        pd.button1Label = "Spotifyで検索";
+        pd.button1Url   = "https://open.spotify.com/search/" + encodedQuery;
+
+        pd.button2Label = "Apple Musicで検索";
+        pd.button2Url   = "https://music.apple.com/search?term=" + encodedQuery;
+    }
+
+    pd.UpdateButtonPointers();
 }
 
 void PresenceModifier::UpdateDuration( double currentTime )

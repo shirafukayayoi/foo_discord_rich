@@ -42,6 +42,7 @@ public:
         COMMAND_RANGE_CODE_HANDLER_EX( IDC_RADIO_STATUS_NAME, IDC_RADIO_STATUS_MIDDLE, BN_CLICKED, OnDdxUiChange )
         COMMAND_HANDLER_EX( IDC_CHECK_DISABLE_WHEN_PAUSED, BN_CLICKED, OnDdxUiChange )
         COMMAND_HANDLER_EX( IDC_CHECK_SWAP_STATUS, BN_CLICKED, OnDdxUiChange )
+        COMMAND_HANDLER_EX( IDC_CHECK_ENABLE_BUTTONS, BN_CLICKED, OnDdxUiChange )
     END_MSG_MAP()
 
 public:
@@ -84,13 +85,14 @@ private:
                             timeSettings,
                             statusSettings,
                             disableWhenPaused,
-                            swapSmallImages )
+                            swapSmallImages,
+                            enableButtons )
     // clang-format on
 
 #undef SPTF_DEFINE_OPTIONS
 #undef SPTF_DEFINE_OPTION
 
-    std::array<std::unique_ptr<qwr::ui::IUiDdxOption>, 11> ddxOptions_;
+    std::array<std::unique_ptr<qwr::ui::IUiDdxOption>, 12> ddxOptions_;
 
     CHyperLink helpUrl_;
 

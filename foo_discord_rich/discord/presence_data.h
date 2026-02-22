@@ -15,6 +15,7 @@ struct PresenceData
     bool operator!=( const PresenceData& other );
 
     void UpdateTextFieldPointers();
+    void UpdateButtonPointers();
 
 private:
     void CopyData( const PresenceData& other );
@@ -28,6 +29,11 @@ public:
     qwr::u8string largeImageKey;
     qwr::u8string smallImageKey;
     double trackLength = 0;
+
+    qwr::u8string button1Label;
+    qwr::u8string button1Url;
+    qwr::u8string button2Label;
+    qwr::u8string button2Url;
 };
 
 } // namespace drp::internal
@@ -48,6 +54,7 @@ public:
     void UpdateImage();
     void UpdateSmallImage();
     void UpdateTrack( metadb_handle_ptr metadb = metadb_handle_ptr() );
+    void UpdateButtons();
     void UpdateDuration( double currentTime );
     void UpdateDuration( double currentTime, double totalLength );
     void DisableDuration();
