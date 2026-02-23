@@ -40,8 +40,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>$(SolutionDir)..\_result\$(Platform)_$(Configuration)\deps\$(ProjectName)\</OutDir>
-    <IntDir>$(SolutionDir)..\_result\$(Platform)_$(Configuration)\temp\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)..\..\_result\$(Platform)_$(Configuration)\deps\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\_result\$(Platform)_$(Configuration)\temp\$(ProjectName)\</IntDir>
     <NMakeOutput>$(OutDir)lib\discord-rpc.lib</NMakeOutput>
   </PropertyGroup>
   <PropertyGroup>

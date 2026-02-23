@@ -411,7 +411,15 @@ void PresenceModifier::UpdateButtons()
             {
                 channelUrl = "https://" + channelUrl;
             }
-            pd.button2Label = "Channel";
+
+            // Try to get channel name for button label
+            auto channelTitle = queryData( "$meta(Channel Title)" );
+            if ( channelTitle.empty() )
+            {
+                channelTitle = queryData( "$meta(Channel_Title)" );
+            }
+
+            pd.button2Label = channelTitle.empty() ? "Channel" : channelTitle;
             pd.button2Url = channelUrl;
         }
     }
