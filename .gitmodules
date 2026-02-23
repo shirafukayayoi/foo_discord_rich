@@ -1,31 +1,41 @@
 [submodule "submodules/foobar2000"]
-	path = submodules/foobar2000
-	url = https://github.com/TheQwertiest/foobar2000-sdk.git
+    path = submodules/foobar2000
+    url = https://github.com/TheQwertiest/foobar2000-sdk.git
+    ignore = dirty
 [submodule "submodules/pfc"]
-	path = submodules/pfc
-	url = https://github.com/TheQwertiest/pfc.git
+    path = submodules/pfc
+    url = https://github.com/TheQwertiest/pfc.git
+    ignore = dirty
 [submodule "submodules/wtl"]
-	path = submodules/wtl
-	url = https://git.code.sf.net/p/wtl/git
+    path = submodules/wtl
+    url = https://git.code.sf.net/p/wtl/git
+    ignore = dirty
 [submodule "submodules/discord-rpc"]
-	path = submodules/discord-rpc
-	url = https://github.com/discordapp/discord-rpc.git
+    path = submodules/discord-rpc
+    url = https://github.com/discordapp/discord-rpc.git
+    ignore = dirty
 [submodule "submodules/acfu-sdk"]
-	path = submodules/acfu-sdk
-	url = https://github.com/3dyd/acfu-sdk.git
+    path = submodules/acfu-sdk
+    url = https://github.com/3dyd/acfu-sdk.git
+    ignore = dirty
 [submodule "submodules/json"]
-	path = submodules/json
-	url = https://github.com/nlohmann/json.git
-	branch = master
+    path = submodules/json
+    url = https://github.com/nlohmann/json.git
+    branch = master
+    ignore = dirty
 [submodule "submodules/fmt"]
-	path = submodules/fmt
-	url = https://github.com/fmtlib/fmt.git
+    path = submodules/fmt
+    url = https://github.com/fmtlib/fmt.git
+    ignore = dirty
 [submodule "submodules/range"]
-	path = submodules/range
-	url = https://github.com/ericniebler/range-v3.git
+    path = submodules/range
+    url = https://github.com/ericniebler/range-v3.git
+    ignore = dirty
 [submodule "submodules/fb2k_utils"]
-	path = submodules/fb2k_utils
-	url = https://github.com/TheQwertiest/fb2k_utils.git
+    path = submodules/fb2k_utils
+    url = https://github.com/TheQwertiest/fb2k_utils.git
+    ignore = dirty
 [submodule "submodules/cpr"]
-	path = submodules/cpr
-	url = https://github.com/libcpr/cpr.git
+    path = submodules/cpr
+    url = https://github.com/libcpr/cpr.git
+    ignore = dirty
