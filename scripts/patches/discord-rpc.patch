@@ -44,7 +44,9 @@ index 9470434..20f29bc 100644
      const char* state;   /* max 128 bytes */
      const char* details; /* max 128 bytes */
      int64_t startTimestamp;
-@@ -43,6 +57,8 @@
+@@ -39,6 +61,8 @@ typedef struct DiscordRichPresence {
+     const char* matchSecret;    /* max 128 bytes */
+     const char* joinSecret;     /* max 128 bytes */
      const char* spectateSecret; /* max 128 bytes */
 +    DiscordButton buttons[2]; /* max 2 buttons */
 +    int buttonCount;
@@ -68,24 +70,26 @@ index 70efa63..e822dfc 100644
 +
                  WriteOptionalString(writer, "state", presence->state);
                  WriteOptionalString(writer, "details", presence->details);
-@@ -148,6 +162,21 @@
-             WriteOptionalBool(writer, "instance", presence->instance);
+@@ -160,6 +168,22 @@ size_t JsonWriteRichPresenceObj(char* dest,
+ 
+                 writer.Key("instance");
+                 writer.Bool(presence->instance != 0);
 +
-+            if (presence->buttonCount > 0) {
-+                WriteKey(writer, "buttons");
-+                writer.StartArray();
-+                for (int i = 0; i < presence->buttonCount && i < 2; ++i) {
-+                    if (presence->buttons[i].label && presence->buttons[i].url) {
-+                        writer.StartObject();
-+                        WriteKey(writer, "label");
-+                        writer.String(presence->buttons[i].label);
-+                        WriteKey(writer, "url");
-+                        writer.String(presence->buttons[i].url);
-+                        writer.EndObject();
++                if (presence->buttonCount > 0) {
++                    WriteKey(writer, "buttons");
++                    writer.StartArray();
++                    for (int i = 0; i < presence->buttonCount && i < 2; ++i) {
++                        if (presence->buttons[i].label && presence->buttons[i].url) {
++                            writer.StartObject();
++                            WriteKey(writer, "label");
++                            writer.String(presence->buttons[i].label);
++                            WriteKey(writer, "url");
++                            writer.String(presence->buttons[i].url);
++                            writer.EndObject();
++                        }
 +                    }
++                    writer.EndArray();
 +                }
-+                writer.EndArray();
-+            }
+             }
          }
      }
- 

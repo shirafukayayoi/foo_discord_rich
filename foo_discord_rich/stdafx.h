@@ -3,6 +3,9 @@
 // clang-format off
 // !!! Include order is important here (esp. for Win headers) !!!
 
+// foobar2000 v2.0 API
+#define FOOBAR2000_TARGET_VERSION 81
+
 #define _WIN32_WINNT _WIN32_WINNT_WIN7
 #define WINVER       _WIN32_WINNT_WIN7
 

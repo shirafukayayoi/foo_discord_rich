@@ -122,13 +122,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="foo_discord_rich.rc2">
       <Filter>resources</Filter>
     </None>
     <None Include="discord\presence_data.h">
       <Filter>discord</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="foo_discord_rich.rc">

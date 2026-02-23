@@ -389,13 +389,29 @@ void PresenceModifier::UpdateButtons()
 
     if ( isYouTube )
     {
-        pd.button1Label = "YouTubeで視聴";
-        pd.button1Url = path;
+        // Ensure YouTube URL has protocol
+        qwr::u8string youtubeUrl = path;
+        if ( youtubeUrl.find( "http://" ) != 0 && youtubeUrl.find( "https://" ) != 0 )
+        {
+            youtubeUrl = "https://" + youtubeUrl;
+        }
 
-        const auto channelUrl = queryData( "$meta(Channel_URL)" );
+        pd.button1Label = "Watch on YouTube";
+        pd.button1Url = youtubeUrl;
+
+        auto channelUrl = queryData( "$meta(Channel URL)" );
+        if ( channelUrl.empty() )
+        {
+            channelUrl = queryData( "$meta(Channel_URL)" );
+        }
         if ( !channelUrl.empty() )
         {
-            pd.button2Label = "チャンネル";
+            // Ensure channel URL has protocol
+            if ( channelUrl.find( "http://" ) != 0 && channelUrl.find( "https://" ) != 0 )
+            {
+                channelUrl = "https://" + channelUrl;
+            }
+            pd.button2Label = "Channel";
             pd.button2Url = channelUrl;
         }
     }
@@ -404,13 +420,18 @@ void PresenceModifier::UpdateButtons()
         const auto artist = queryData( "%artist%" );
         const auto title = queryData( "%title%" );
         const auto searchQuery = artist + " " + title;
-        const auto encodedQuery = PercentEncode( searchQuery );
 
-        pd.button1Label = "Spotifyで検索";
-        pd.button1Url = "https://open.spotify.com/search/" + encodedQuery;
+        // Only create buttons if we have valid search content
+        if ( !artist.empty() || !title.empty() )
+        {
+            const auto encodedQuery = PercentEncode( searchQuery );
 
-        pd.button2Label = "Apple Musicで検索";
-        pd.button2Url = "https://music.apple.com/search?term=" + encodedQuery;
+            pd.button1Label = "Search on Spotify";
+            pd.button1Url = "https://open.spotify.com/search/" + encodedQuery;
+
+            pd.button2Label = "Search on Apple Music";
+            pd.button2Url = "https://music.apple.com/search?term=" + encodedQuery;
+        }
     }
 
     pd.UpdateButtonPointers();

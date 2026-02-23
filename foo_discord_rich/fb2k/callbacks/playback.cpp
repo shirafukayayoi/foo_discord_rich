@@ -2,6 +2,8 @@
 
 #include <discord/discord_integration.h>
 
+#include <foobar2000/SDK/timer.h>
+
 #include <chrono>
 #include <optional>
 
