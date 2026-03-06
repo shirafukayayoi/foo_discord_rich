@@ -175,7 +175,7 @@ class DiscordContextMenuItems : public contextmenu_item_simple
 public:
     unsigned get_num_items() override
     {
-        return 2;
+        return 3;
     }
 
     void get_item_name( unsigned p_index, pfc::string_base& p_out ) override
@@ -187,6 +187,9 @@ public:
             break;
         case 1:
             p_out = "Set button for this album...";
+            break;
+        case 2:
+            p_out = "Set button for this artist...";
             break;
         default:
             uBugCheck();
@@ -203,6 +206,9 @@ public:
         case 1:
             p_out = "Set a custom Discord button for the album of the selected track";
             return true;
+        case 2:
+            p_out = "Set a custom Discord button for the artist of the selected track";
+            return true;
         default:
             return false;
         }
@@ -216,6 +222,8 @@ public:
             return drp::guid::context_menu_set_track_button;
         case 1:
             return drp::guid::context_menu_set_album_button;
+        case 2:
+            return drp::guid::context_menu_set_artist_button;
         default:
             uBugCheck();
         }
@@ -286,6 +294,31 @@ public:
 
             const std::string condition = std::string( "%album%=" ) + albumStr;
             const std::wstring display = L"Album: " + qwr::unicode::ToWide( albumStr );
+
+            QuickButtonDialog dlg( display, { condition } );
+            dlg.DoModal( core_api::get_main_window() );
+        }
+        else if ( p_index == 2 )
+        {
+            // Per-artist: condition = %artist%=<artist name>
+            titleformat_object::ptr tfArtist;
+            titleformat_compiler::get()->compile_safe( tfArtist, "%artist%" );
+
+            pfc::string8_fast artist;
+            p_data[0]->format_title( nullptr, artist, tfArtist, nullptr );
+            const std::string artistStr = artist.c_str();
+
+            if ( artistStr.empty() )
+            {
+                MessageBoxW( core_api::get_main_window(),
+                             L"This track has no artist tag.",
+                             L"Discord Rich Presence",
+                             MB_ICONINFORMATION );
+                return;
+            }
+
+            const std::string condition = std::string( "%artist%=" ) + artistStr;
+            const std::wstring display = L"Artist: " + qwr::unicode::ToWide( artistStr );
 
             QuickButtonDialog dlg( display, { condition } );
             dlg.DoModal( core_api::get_main_window() );
