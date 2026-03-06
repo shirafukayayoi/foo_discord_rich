@@ -2,10 +2,13 @@
 
 #include "presence_data.h"
 
+#include "button_config.h"
+
 #include <artwork/fetcher.h>
 #include <discord/discord_integration.h>
 #include <fb2k/config.h>
 
+#include <nlohmann/json.hpp>
 #include <qwr/algorithm.h>
 
 namespace
@@ -58,6 +61,67 @@ qwr::u8string PercentEncode( const qwr::u8string& input )
             result += "0123456789ABCDEF"[c & 0xF];
         }
     }
+    return result;
+}
+
+std::vector<drp::button_config::ButtonRule> ParseButton2Rules()
+{
+    try
+    {
+        const std::string rulesStr = drp::config::button2Rules;
+        const auto rulesJson = nlohmann::json::parse( rulesStr );
+        return rulesJson.get<std::vector<drp::button_config::ButtonRule>>();
+    }
+    catch ( ... )
+    {
+        // Log error and return empty rules
+        return {};
+    }
+}
+
+bool EvaluateMatchCondition( const qwr::u8string& condition, const metadb_handle_ptr& handle, const std::function<qwr::u8string( const qwr::u8string& )>& queryData )
+{
+    // Empty condition matches all tracks (default button)
+    if ( condition.empty() )
+    {
+        return true;
+    }
+
+    // Expected format: "%key%=value"
+    const auto eqPos = condition.find( '=' );
+    if ( eqPos == qwr::u8string::npos || eqPos == 0 )
+    {
+        return false;
+    }
+
+    const auto key = condition.substr( 0, eqPos );
+    const auto expectedValue = condition.substr( eqPos + 1 );
+
+    const auto actualValue = queryData( key );
+    return actualValue == expectedValue;
+}
+
+qwr::u8string ExpandUrlTemplate( const qwr::u8string& urlTemplate, const metadb_handle_ptr& handle, const std::function<qwr::u8string( const qwr::u8string& )>& queryData )
+{
+    qwr::u8string result = urlTemplate;
+
+    // Replace common template variables
+    const std::vector<std::pair<qwr::u8string, qwr::u8string>> replacements = {
+        { "%artist%", PercentEncode( queryData( "%artist%" ) ) },
+        { "%title%", PercentEncode( queryData( "%title%" ) ) },
+        { "%album%", PercentEncode( queryData( "%album%" ) ) },
+        { "%album artist%", PercentEncode( queryData( "%album artist%" ) ) } };
+
+    for ( const auto& [placeholder, value]: replacements )
+    {
+        size_t pos = 0;
+        while ( ( pos = result.find( placeholder, pos ) ) != qwr::u8string::npos )
+        {
+            result.replace( pos, placeholder.length(), value );
+            pos += value.length();
+        }
+    }
+
     return result;
 }
 
@@ -434,11 +498,27 @@ void PresenceModifier::UpdateButtons()
         {
             const auto encodedQuery = PercentEncode( searchQuery );
 
+            // Button 1: Always "Search on Spotify" (fixed)
             pd.button1Label = "Search on Spotify";
             pd.button1Url = "https://open.spotify.com/search/" + encodedQuery;
 
-            pd.button2Label = "Search on Apple Music";
-            pd.button2Url = "https://music.apple.com/search?term=" + encodedQuery;
+            // Button 2: Use custom rules or default to Apple Music
+            const auto rules = ParseButton2Rules();
+            bool ruleMatched = false;
+
+            for ( const auto& rule: rules )
+            {
+                if ( EvaluateMatchCondition( rule.matchCondition, pd.metadb, queryData ) )
+                {
+                    pd.button2Label = rule.label;
+                    pd.button2Url = ExpandUrlTemplate( rule.url, pd.metadb, queryData );
+                    ruleMatched = true;
+                    break;
+                }
+            }
+
+            // If no rule matched and rules are empty, don't show button 2
+            // (Button 2 only shows if a rule explicitly matches or is configured)
         }
     }
 

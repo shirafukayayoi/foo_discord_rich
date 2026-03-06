@@ -49,5 +49,6 @@ extern qwr::fb2k::ConfigString pausedImageId_Light;
 extern qwr::fb2k::ConfigBool disableWhenPaused;
 extern qwr::fb2k::ConfigBool swapSmallImages;
 extern qwr::fb2k::ConfigBool enableButtons;
+extern qwr::fb2k::ConfigString button2Rules;
 
 }; // namespace drp::config

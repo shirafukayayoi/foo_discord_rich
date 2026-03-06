@@ -5,6 +5,8 @@
 #define IDD_PREFS_MAIN_TAB              107
 #define IDD_PREFS_TAB_HOST              116
 #define IDD_PREFS_ADVANCED_TAB          121
+#define IDD_PREFS_BUTTONS_TAB           122
+#define IDD_DLG_BUTTON_RULE             123
 #define IDC_EDIT_BOTTOM_TEXT            1068
 #define IDC_EDIT_TOP_TEXT               1069
 #define IDC_EDIT_PARTYID                1070
@@ -43,14 +45,26 @@
 #define IDC_RADIO_STATUS_TOP            1103
 #define IDC_RADIO_STATUS_MIDDLE         1104
 #define IDC_CHECK_ENABLE_BUTTONS        1105
+#define IDC_LIST_RULES                  1106
+#define IDC_BUTTON_ADD_RULE             1107
+#define IDC_BUTTON_EDIT_RULE            1108
+#define IDC_BUTTON_DELETE_RULE          1109
+#define IDC_EDIT_CONDITION              1110
+#define IDC_EDIT_LABEL                  1111
+#define IDC_EDIT_URL                    1112
+#define IDD_DLG_QUICK_BUTTON            124
+#define IDC_STATIC_TARGET_INFO          1113
+#define IDC_EDIT_QB_LABEL               1114
+#define IDC_EDIT_QB_URL                 1115
+#define IDC_BUTTON_CLEAR_RULE           1116
 
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
 #    ifndef APSTUDIO_READONLY_SYMBOLS
-#        define _APS_NEXT_RESOURCE_VALUE 123
+#        define _APS_NEXT_RESOURCE_VALUE 125
 #        define _APS_NEXT_COMMAND_VALUE  40012
-#        define _APS_NEXT_CONTROL_VALUE  1106
+#        define _APS_NEXT_CONTROL_VALUE  1117
 #        define _APS_NEXT_SYMED_VALUE    101
 #    endif
 #endif

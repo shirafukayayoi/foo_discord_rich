@@ -5,6 +5,7 @@
 #include <discord/discord_integration.h>
 #include <fb2k/config.h>
 #include <ui/ui_pref_tab_advanced.h>
+#include <ui/ui_pref_tab_buttons.h>
 #include <ui/ui_pref_tab_main.h>
 
 namespace
@@ -56,6 +57,7 @@ PreferenceTabManager::PreferenceTabManager( preferences_page_callback::ptr callb
     : callback_( callback )
 {
     tabs_.emplace_back( std::make_unique<PreferenceTabMain>( this ) );
+    tabs_.emplace_back( std::make_unique<PreferenceTabButtons>( this ) );
     tabs_.emplace_back( std::make_unique<PreferenceTabAdvanced>( this ) );
 }
 

@@ -47,7 +47,7 @@
   <PropertyGroup>
     <NMakeBuildCommandLine>mkdir "$(IntDir)"
 cd "$(IntDir)"
-cmake -S "$(ProjectDir.TrimEnd('\'))" -DCMAKE_INSTALL_PREFIX="$(OutDir.TrimEnd('\'))" -DCMAKE_GENERATOR_INSTANCE="$(CurrentVsInstallRoot)" -DCMAKE_GENERATOR_PLATFORM=$(Platform) -DUSE_STATIC_CRT=ON
+cmake -S "$(ProjectDir.TrimEnd('\'))" -DCMAKE_INSTALL_PREFIX="$(OutDir.TrimEnd('\'))" -DCMAKE_GENERATOR_INSTANCE="$(CurrentVsInstallRoot)" -DCMAKE_GENERATOR_PLATFORM=$(Platform) -DUSE_STATIC_CRT=ON -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
 cmake --build "$(IntDir.TrimEnd('\'))" --config $(Configuration) --target install</NMakeBuildCommandLine>
     <ExecutablePath>$(DevEnvDir)CommonExtensions\Microsoft\CMake\CMake\bin;$(ExecutablePath)</ExecutablePath>
     <NMakeCleanCommandLine>rmdir /s/q "$(IntDir.TrimEnd('\'))"

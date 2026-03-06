@@ -98,7 +98,7 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,218,128,10
     CONTROL         "Swap `paused` and `playing` images",IDC_CHECK_SWAP_STATUS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,231,135,10
-    CONTROL         "Enable YouTube/Spotify/Apple Music buttons",IDC_CHECK_ENABLE_BUTTONS,
+    CONTROL         "Enable Discord buttons",IDC_CHECK_ENABLE_BUTTONS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,244,159,10
     GROUPBOX        "Show status as",IDC_STATIC,218,191,102,69
     CONTROL         "App Name",IDC_RADIO_STATUS_NAME,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,227,204,56,10
@@ -139,11 +139,49 @@ BEGIN
     PUSHBUTTON      "Open containing folder...",IDC_BUTTON_OPEN_CACHE_FOLDER,224,223,90,14
 END
 
+IDD_PREFS_BUTTONS_TAB DIALOGEX 0, 0, 327, 268
+STYLE DS_SETFONT | DS_CONTROL | WS_CHILD | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    LTEXT           "Button 2 Rules (not applied to YouTube tracks):",IDC_STATIC,7,7,318,8
+    LTEXT           "Button 1: fixed 'Search on Spotify'.  Button 2: rules below, evaluated top-to-bottom (first match wins). Leave Condition empty for a default button on all tracks.",IDC_STATIC,7,18,318,16
+    CONTROL         "",IDC_LIST_RULES,"SysListView32",LVS_REPORT | LVS_SINGLESEL | WS_BORDER | WS_TABSTOP,7,37,313,190
+    PUSHBUTTON      "Add Rule",IDC_BUTTON_ADD_RULE,7,230,70,14
+    PUSHBUTTON      "Edit Rule",IDC_BUTTON_EDIT_RULE,85,230,70,14
+    PUSHBUTTON      "Delete Rule",IDC_BUTTON_DELETE_RULE,163,230,70,14
+END
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
+IDD_DLG_QUICK_BUTTON DIALOGEX 0, 0, 350, 120
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Discord Rich Presence - Set Button"
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    LTEXT           "Setting for:",IDC_STATIC,7,7,45,8
+    LTEXT           "",IDC_STATIC_TARGET_INFO,55,7,288,8
+    LTEXT           "Button Label:",IDC_STATIC,7,22,80,8
+    EDITTEXT        IDC_EDIT_QB_LABEL,7,32,336,12,ES_AUTOHSCROLL
+    LTEXT           "URL Template (supports %artist%, %title%, %album%, %album artist%):",IDC_STATIC,7,50,336,8
+    EDITTEXT        IDC_EDIT_QB_URL,7,60,336,28,ES_AUTOHSCROLL | ES_MULTILINE | WS_VSCROLL
+    PUSHBUTTON      "OK",IDOK,143,98,60,14
+    PUSHBUTTON      "Clear Rule",IDC_BUTTON_CLEAR_RULE,211,98,60,14
+    PUSHBUTTON      "Cancel",IDCANCEL,279,98,60,14
+END
+
+IDD_DLG_BUTTON_RULE DIALOGEX 0, 0, 350, 156
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Add/Edit Button Rule"
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    LTEXT           "Match Condition (format: %key%=value, e.g. %artist%=YOASOBI):",IDC_STATIC,7,7,336,8
+    LTEXT           "Leave empty to match all tracks (use as default button).",IDC_STATIC,7,17,336,8
+    EDITTEXT        IDC_EDIT_CONDITION,7,27,336,12,ES_AUTOHSCROLL
+    LTEXT           "Button Label:",IDC_STATIC,7,44,250,8
+    EDITTEXT        IDC_EDIT_LABEL,7,54,336,12,ES_AUTOHSCROLL
+    LTEXT           "URL Template (supports %artist%, %title%, %album%, %album artist%):",IDC_STATIC,7,71,336,8
+    EDITTEXT        IDC_EDIT_URL,7,81,336,30,ES_AUTOHSCROLL | ES_MULTILINE | WS_VSCROLL
+    PUSHBUTTON      "OK",IDOK,182,124,80,14
+    PUSHBUTTON      "Cancel",IDCANCEL,270,124,80,14
+END
 
 #ifdef APSTUDIO_INVOKED
 GUIDELINES DESIGNINFO
@@ -157,6 +195,18 @@ BEGIN
     END
 
     IDD_PREFS_ADVANCED_TAB, DIALOG
+    BEGIN
+    END
+
+    IDD_PREFS_BUTTONS_TAB, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_BUTTON_RULE, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_QUICK_BUTTON, DIALOG
     BEGIN
     END
 END
@@ -174,6 +224,21 @@ BEGIN
 END
 
 IDD_PREFS_ADVANCED_TAB AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_PREFS_BUTTONS_TAB AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_BUTTON_RULE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_QUICK_BUTTON AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
