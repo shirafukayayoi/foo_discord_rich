@@ -130,7 +130,7 @@ void PreferenceTabButtons::OnUiChangeRequest( int nID, bool enable )
 
 t_uint32 PreferenceTabButtons::GetState()
 {
-    return preferences_state::resettable;
+    return preferences_state::resettable | ( isModified_ ? preferences_state::changed : 0 );
 }
 
 BOOL PreferenceTabButtons::OnInitDialog( HWND hwndFocus, LPARAM lParam )
@@ -158,6 +158,7 @@ void PreferenceTabButtons::OnAddRule( UINT uNotifyCode, int nID, CWindow wndCtl 
         isModified_ = true;
         RefreshRulesList();
         UpdateButtonStates();
+        pParent_->OnDataChanged();
     }
 }
 
@@ -179,6 +180,7 @@ void PreferenceTabButtons::OnDeleteRule( UINT uNotifyCode, int nID, CWindow wndC
         isModified_ = true;
         RefreshRulesList();
         UpdateButtonStates();
+        pParent_->OnDataChanged();
     }
 }
 
@@ -261,6 +263,7 @@ void PreferenceTabButtons::EditRule( int index )
         rules_[index] = dlg.GetRule();
         isModified_ = true;
         RefreshRulesList();
+        pParent_->OnDataChanged();
     }
 }
 
